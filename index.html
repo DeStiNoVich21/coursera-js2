@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Интерактивная фотогалерея</title>
+  <style>
+    /* Общие стили, вдохновлённые дизайном GitHub */
+    body {
+      background-color: #f6f8fa;
+      font-family: "Segoe UI", sans-serif;
+      color: #24292e;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    /* Стили для основного блока отображения изображения */
+    #image {
+      width: 100%;
+      height: 300px;
+      border: 1px solid #d1d5da;
+      background-color: #fff;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      text-align: center;
+      line-height: 300px;
+      margin-bottom: 20px;
+      font-size: 1.5em;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(27,31,35,0.12), 0 8px 24px rgba(27,31,35,0.12);
+    }
+    /* Стили для галереи миниатюр */
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+    .thumbnail {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border: 1px solid #d1d5da;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(27,31,35,0.12);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .thumbnail:hover, .thumbnail:focus {
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(27,31,35,0.15);
+      outline: none;
+    }
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 0.9em;
+      color: #586069;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Интерактивная фотогалерея</h1>
+    <!-- Блок отображения выбранного изображения -->
+    <div id="image">Наведите курсор или используйте клавишу Tab для выбора изображения ниже.</div>
+    <!-- Галерея миниатюр -->
+    <div class="gallery">
+      <img class="thumbnail" src="https://media.discordapp.net/attachments/1356293685033308323/1356293685460992000/IMG_9047.png?ex=67ecb32d&is=67eb61ad&hm=6010d83db83d8b26d9ffbe813abdb68edbbe331580ea73ec0326373ee55592ae&=&format=webp&quality=lossless&width=864&height=864" alt="Описание изображения 1">
+      <img class="thumbnail" src="https://media.discordapp.net/attachments/1356293685033308323/1356293685981089813/IMG_9050.png?ex=67ecb32d&is=67eb61ad&hm=3c941a2ab968b9a31861ffe77b2f3a86b9bfb1f88db20711097e95be07516812&=&format=webp&quality=lossless&width=864&height=864" alt="Описание изображения 2">
+      <img class="thumbnail" src="https://media.discordapp.net/attachments/1356293685033308323/1356293686358708294/IMG_9055.png?ex=67ecb32d&is=67eb61ad&hm=61c1c4766830baeb661234668287e83da29622df21c751ff5e08abdac3579ca3&=&format=webp&quality=lossless&width=864&height=864" alt="Описание изображения 3">
+    </div>
+  </div>
+  <footer>
+    &copy; 2025 Интерактивная фотогалерея
+  </footer>
+  <script>
+    // Функция, вызываемая при наведении курсора или фокусировке на миниатюре
+    function upDate(previewPic) {
+      console.log("Наведение или фокус на изображение");
+      console.log("Атрибут alt: " + previewPic.alt);
+      console.log("Источник изображения: " + previewPic.src);
+      
+      var displayDiv = document.getElementById("image");
+      displayDiv.innerHTML = previewPic.alt;
+      displayDiv.style.backgroundImage = "url('" + previewPic.src + "')";
+    }
+    
+    // Функция, вызываемая при уходе курсора или потере фокуса с миниатюры
+    function undo() {
+      console.log("Уход курсора или потеря фокуса с изображения");
+      var displayDiv = document.getElementById("image");
+      displayDiv.innerHTML = "Наведите курсор или используйте клавишу Tab для выбора изображения ниже.";
+      displayDiv.style.backgroundImage = "url('')";
+    }
+
+    // Функция для добавления атрибута tabindex ко всем миниатюрам
+    function addTabIndex() {
+      var thumbnails = document.querySelectorAll('.thumbnail');
+      thumbnails.forEach(function(thumbnail) {
+        thumbnail.setAttribute('tabindex', '0');
+        // Добавляем обработчики событий
+        thumbnail.addEventListener('focus', function() {
+          upDate(thumbnail);
+        });
+        thumbnail.addEventListener('blur', function() {
+          undo();
+        });
+        // Добавляем обработчики событий для мыши
+        thumbnail.addEventListener('mouseover', function() {
+          upDate(thumbnail);
+        });
+        thumbnail.addEventListener('mouseout', function() {
+          undo();
+        });
+      });
+    }
+
+    // Вызываем функцию addTabIndex при загрузке страницы
+    window.onload = addTabIndex;
+  </script>
+</body>
+</html>
